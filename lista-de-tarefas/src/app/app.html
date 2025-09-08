@@ -1,0 +1,58 @@
+<main class="container">
+  <header>
+    <h1>minhas tarefas</h1>
+  </header>
+
+  <div class="input-container">
+    <input
+      type="text"
+      placeholder="O que precisa ser feito?"
+      [(ngModel)]="novaTarefa"
+      (keyup.enter)="adicionarTarefa()"
+    />
+    <button (click)="adicionarTarefa()">+</button>
+  </div>
+
+  <div *ngIf="tarefas.length > 0; else emptyState" class="list-container">
+    <ul class="task-list">
+     <li *ngFor="let tarefa of tarefasFiltradas" [class.removendo]="tarefa.estado === 'removendo'">
+        <div class="task-content">
+          <input 
+            type="checkbox" 
+            [checked]="tarefa.conclida"
+            (change)="toggleConclusao(tarefa)" 
+          />
+          <div class="tarefa-info">
+            <span>{{ tarefa.nome }}</span>
+            <div *ngIf="tarefa.conclida" class="data-conclusao-container">
+              <input type="date" class="date-input" [(ngModel)]="tarefa.dataConclusao" />
+            </div>
+          </div>
+        </div>
+        <button class="remover-btn" (click)="removerTarefa(tarefa)">&times;</button>
+      </li>
+    </ul>
+
+    <footer class="list-footer">
+      <span class="task-count">{{ itensRestantes }} tarefas restantes</span>
+      <div class="filters">
+        <button [class.active]="filtro === 'todas'" (click)="definirFiltro('todas')">Todas</button>
+        <button [class.active]="filtro === 'ativas'" (click)="definirFiltro('ativas')">Ativas</button>
+        <button [class.active]="filtro === 'concluidas'" (click)="definirFiltro('concluidas')">Concluídas</button>
+      </div>
+      <button class="clear-completed" (click)="limparConcluidas()">Limpar Concluídas</button>
+    </footer>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <h3>Tudo em ordem!</h3>
+      <p>Você não tem tarefas pendentes. Que tal adicionar uma?</p>
+    </div>
+  </ng-template>
+
+</main>
